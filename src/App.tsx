@@ -1,9 +1,9 @@
 import React from 'react';
-import { Login } from './component/page/Login';
+import { AppRoute } from 'AppRoute';
 
 function App() {
   return (
-    <Login></Login>
+    <AppRoute />
   );
 }
 
