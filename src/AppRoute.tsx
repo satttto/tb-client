@@ -10,12 +10,10 @@ import { NotFound } from 'components/pages/NotFound';
 export const AppRoute = (): JSX.Element => {
   return (
     <Router>
-      <div>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<NotFound />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/login" element={<Login />}/>
+        <Route path="*" element={<NotFound />}/>
+      </Routes>
     </Router>
   )
 }
