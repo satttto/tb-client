@@ -7,17 +7,27 @@ import { Box, Typography, Grid, TextField, FormControlLabel, Checkbox, Button} f
 // TODO: send request
 
 type FormValues = {
+  name: string;
   email: string;
   password: string;
   rememberMe: string;
 };
 
-export const Login = (): JSX.Element => {
+export const SignUp = (): JSX.Element => {
   const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
-  const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスを入力してください'], ['pattern', '不正なメールアドレスです']]);
-  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードを入力してください']]);
+  const nameHelperMap: Map<string, string> = new Map([['required', '名前は必須です']]);
+  const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスは必須です'], ['pattern', '不正なメールアドレスです']]);
+  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です']]);
+  const [ nameHelper, setNameHelper ] = useState('');
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
+
+  // 名前のヘルパーテキストの更新
+  useEffect(() => {
+    const type = errors.name?.type || '';
+    const helperText = nameHelperMap.get(type) || '';
+    setNameHelper(helperText);
+  }, [errors.name]);
 
   // メールアドレスのヘルパーテキストの更新
   useEffect(() => {
@@ -34,15 +44,25 @@ export const Login = (): JSX.Element => {
   }, [errors.password]);
 
 
-  // ログイン処理
+  // 新規登録処理
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data)
   }
 
   return (
     <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Typography variant="h5">ログイン</Typography>
+      <Typography variant="h5">新規登録</Typography>
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1, width: 300 }}>
+        <TextField
+          id="name"
+          required
+          label="名前"
+          {...register("name", { required: true })}
+          error={Boolean(errors.name)}
+          helperText={nameHelper}
+          margin="normal"
+          fullWidth
+        />
         <TextField
           id="email"
           required
@@ -74,7 +94,7 @@ export const Login = (): JSX.Element => {
             variant="contained"
             type="submit"
             fullWidth
-          >ログインする</Button>
+          >新規登録する</Button>
         </Box>
         
       </Box>
@@ -83,7 +103,7 @@ export const Login = (): JSX.Element => {
           <Link to="#">パスワードを忘れた</Link>
         </Grid>
         <Grid item> 
-          <Link to="/signup">登録する</Link>
+          <Link to="/login">ログインする</Link>
         </Grid>
         </Grid>
     </Box>
