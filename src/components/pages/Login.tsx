@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, TextField, FormControlLabel, Checkbox, Button} from '@mui/material';
-
-
-// TODO: send request
+import { 
+  Box, 
+  Typography,
+  Grid,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  CircularProgress
+} from '@mui/material';
+import { useFetch } from 'hooks/useFetch';
 
 type FormValues = {
   email: string;
@@ -18,6 +25,7 @@ export const Login = (): JSX.Element => {
   const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードを入力してください']]);
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
+  const { post, loading } = useFetch();
 
   // メールアドレスのヘルパーテキストの更新
   useEffect(() => {
@@ -35,8 +43,12 @@ export const Login = (): JSX.Element => {
 
 
   // ログイン処理
+  // TODO: 
   const onSubmit: SubmitHandler<FormValues> = data => {
-    console.log(data)
+    console.log(data);
+    post('https://example.com', data)
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
   }
 
   return (
@@ -73,8 +85,9 @@ export const Login = (): JSX.Element => {
             id="loginButton"
             variant="contained"
             type="submit"
+            disabled={loading}
             fullWidth
-          >ログインする</Button>
+          >{ loading ?  <CircularProgress color="inherit"/> : 'ログインする' }</Button>
         </Box>
         
       </Box>
