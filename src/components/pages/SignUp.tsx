@@ -15,36 +15,31 @@ type FormValues = {
 
 export const SignUp = (): JSX.Element => {
   const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
+  const nameHelperMap: Map<string, string> = new Map([['required', '名前は必須です']]);
+  const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスは必須です'], ['pattern', '不正なメールアドレスです']]);
+  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です']]);
   const [ nameHelper, setNameHelper ] = useState('');
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
 
   // 名前のヘルパーテキストの更新
   useEffect(() => {
-    let helperText = ''
-    if (errors.name?.type === 'required') {
-      helperText = '名前は必須です';
-    } 
+    const type = errors.name?.type || '';
+    const helperText = nameHelperMap.get(type) || '';
     setNameHelper(helperText);
   }, [errors.name]);
 
   // メールアドレスのヘルパーテキストの更新
   useEffect(() => {
-    let helperText = ''
-    if (errors.email?.type === 'required') {
-      helperText = 'メールアドレスは必須です';
-    } else if (errors.email?.type === 'pattern') {
-      helperText = '不正なメールアドレスです';
-    } 
+    const type = errors.email?.type || '';
+    const helperText = emailHelperMap.get(type) || '';
     setEmailHelper(helperText);
   }, [errors.email]);
 
   // パスワードのヘルパーテキストの更新
   useEffect(() => {
-    let helperText = ''
-    if (errors.password?.type === 'required') {
-      helperText = 'パスワードは必須です';
-    } 
+    const type = errors.password?.type || '';
+    const helperText = passwordHelperMap.get(type) || '';
     setPasswordHelper(helperText);
   }, [errors.password]);
 

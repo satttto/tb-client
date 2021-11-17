@@ -14,26 +14,22 @@ type FormValues = {
 
 export const Login = (): JSX.Element => {
   const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
+  const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスを入力してください'], ['pattern', '不正なメールアドレスです']]);
+  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードを入力してください']]);
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
 
   // メールアドレスのヘルパーテキストの更新
   useEffect(() => {
-    let helperText = ''
-    if (errors.email?.type === 'required') {
-      helperText = 'メールアドレスを入力してください';
-    } else if (errors.email?.type === 'pattern') {
-      helperText = '不正なメールアドレスです';
-    } 
+    const type = errors.email?.type || '';
+    const helperText = emailHelperMap.get(type) || '';
     setEmailHelper(helperText);
   }, [errors.email]);
 
   // パスワードのヘルパーテキストの更新
   useEffect(() => {
-    let helperText = ''
-    if (errors.password?.type === 'required') {
-      helperText = 'パスワードを入力してください';
-    } 
+    const type = errors.password?.type || '';
+    const helperText = passwordHelperMap.get(type) || '';
     setPasswordHelper(helperText);
   }, [errors.password]);
 
