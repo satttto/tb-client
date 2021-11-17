@@ -10,6 +10,7 @@ type FormValues = {
   name: string;
   email: string;
   password: string;
+  rememberMe: string;
 };
 
 export const SignUp = (): JSX.Element => {

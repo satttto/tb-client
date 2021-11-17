@@ -9,6 +9,7 @@ import { Box, Typography, Grid, TextField, FormControlLabel, Checkbox, Button} f
 type FormValues = {
   email: string;
   password: string;
+  rememberMe: string;
 };
 
 export const Login = (): JSX.Element => {
