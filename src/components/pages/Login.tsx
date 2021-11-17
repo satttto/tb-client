@@ -12,8 +12,32 @@ type FormValues = {
 };
 
 export const Login = (): JSX.Element => {
-  const { handleSubmit, register, formState: { errors } } = useForm();
+  const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
+  const [ emailHelper, setEmailHelper ] = useState('');
+  const [ passwordHelper, setPasswordHelper ] = useState('');
 
+  // メールアドレスのヘルパーテキストの更新
+  useEffect(() => {
+    let helperText = ''
+    if (errors.email?.type === 'required') {
+      helperText = 'メールアドレスを入力してください';
+    } else if (errors.email?.type === 'pattern') {
+      helperText = '不正なメールアドレスです';
+    } 
+    setEmailHelper(helperText);
+  }, [errors.email]);
+
+  // パスワードのヘルパーテキストの更新
+  useEffect(() => {
+    let helperText = ''
+    if (errors.password?.type === 'required') {
+      helperText = 'パスワードを入力してください';
+    } 
+    setPasswordHelper(helperText);
+  }, [errors.password]);
+
+
+  // ログイン処理
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data)
   }
@@ -28,6 +52,7 @@ export const Login = (): JSX.Element => {
           label="メールアドレス"
           {...register("email", { required: true,　pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i })}
           error={Boolean(errors.email)}
+          helperText={emailHelper}
           margin="normal"
           fullWidth
         />
@@ -36,8 +61,9 @@ export const Login = (): JSX.Element => {
           required
           type="password"
           label="パスワード"
-          {...register("password", { required: true, minLength: 8 })}
-          error={Boolean(errors.passwowrd)}
+          {...register("password", { required: true })}
+          error={Boolean(errors.password)}
+          helperText={passwordHelper}
           margin="normal"
           fullWidth
         />
