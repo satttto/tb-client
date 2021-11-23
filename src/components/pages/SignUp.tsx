@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, TextField, FormControlLabel, Checkbox, Button} from '@mui/material';
-
-
-// TODO: send request
+import { 
+  Box, 
+  Typography,
+  Grid,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  CircularProgress
+} from '@mui/material';
+import { useFetch } from 'hooks/useFetch';
 
 type FormValues = {
   name: string;
@@ -17,16 +24,18 @@ export const SignUp = (): JSX.Element => {
   const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
   const nameHelperMap: Map<string, string> = new Map([['required', '名前は必須です']]);
   const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスは必須です'], ['pattern', '不正なメールアドレスです']]);
-  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です']]);
+  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です'], ['minLength', '少なくとも8文字は入力してください']]);
   const [ nameHelper, setNameHelper ] = useState('');
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
+  const { post, loading } = useFetch();
 
   // 名前のヘルパーテキストの更新
   useEffect(() => {
     const type = errors.name?.type || '';
     const helperText = nameHelperMap.get(type) || '';
     setNameHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.name]);
 
   // メールアドレスのヘルパーテキストの更新
@@ -34,6 +43,7 @@ export const SignUp = (): JSX.Element => {
     const type = errors.email?.type || '';
     const helperText = emailHelperMap.get(type) || '';
     setEmailHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.email]);
 
   // パスワードのヘルパーテキストの更新
@@ -41,12 +51,17 @@ export const SignUp = (): JSX.Element => {
     const type = errors.password?.type || '';
     const helperText = passwordHelperMap.get(type) || '';
     setPasswordHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.password]);
 
 
   // 新規登録処理
+  // TODO: 
   const onSubmit: SubmitHandler<FormValues> = data => {
-    console.log(data)
+    console.log(data);
+    post('https://example.com', data)
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
   }
 
   return (
@@ -93,8 +108,9 @@ export const SignUp = (): JSX.Element => {
             id="loginButton"
             variant="contained"
             type="submit"
+            disabled={loading}
             fullWidth
-          >新規登録する</Button>
+          >{ loading ?  <CircularProgress color="inherit"/> : '新規登録する' }</Button>
         </Box>
         
       </Box>
