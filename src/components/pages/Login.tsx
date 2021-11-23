@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from 'app/hook';
+import { login } from 'features/auth/actions';
+import { loginStatusSelector } from 'features/auth/selectors';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Box, 
   Typography,
@@ -12,11 +15,12 @@ import {
   CircularProgress
 } from '@mui/material';
 import { useFetch } from 'hooks/useFetch';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 type FormValues = {
   email: string;
   password: string;
-  rememberMe: string;
+  rememberMe: boolean;
 };
 
 export const Login = (): JSX.Element => {
@@ -25,7 +29,10 @@ export const Login = (): JSX.Element => {
   const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードを入力してください']]);
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
-  const { post, loading } = useFetch();
+  const dispatch = useAppDispatch();
+  const loginStatus = useAppSelector(loginStatusSelector);
+  const navigate = useNavigate();
+
 
   // メールアドレスのヘルパーテキストの更新
   useEffect(() => {
@@ -43,14 +50,19 @@ export const Login = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.password]); 
 
+  // 既にログインしている場合、ホームにリダイレクトする
+  if (loginStatus.isLoggedIn) {
+    navigate('/');
+  }
 
   // ログイン処理
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data);
-    post(`${process.env.REACT_APP_API_BASE_URL}`, data)
-    .then(data => console.log(data))
+    dispatch(login(data))
+    .then(unwrapResult)
     .catch(error => console.log(error));
-  }
+  };
+
 
   return (
     <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -86,9 +98,9 @@ export const Login = (): JSX.Element => {
             id="loginButton"
             variant="contained"
             type="submit"
-            disabled={loading}
+            disabled={loginStatus.isLoading}
             fullWidth
-          >{ loading ?  <CircularProgress color="inherit"/> : 'ログインする' }</Button>
+          >{ loginStatus.isLoading ?  <CircularProgress color="inherit"/> : 'ログインする' }</Button>
         </Box>
         
       </Box>
