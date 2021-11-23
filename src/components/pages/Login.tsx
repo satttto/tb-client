@@ -32,6 +32,7 @@ export const Login = (): JSX.Element => {
     const type = errors.email?.type || '';
     const helperText = emailHelperMap.get(type) || '';
     setEmailHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.email]);
 
   // パスワードのヘルパーテキストの更新
@@ -39,14 +40,14 @@ export const Login = (): JSX.Element => {
     const type = errors.password?.type || '';
     const helperText = passwordHelperMap.get(type) || '';
     setPasswordHelper(helperText);
-  }, [errors.password]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errors.password]); 
 
 
   // ログイン処理
-  // TODO: 
   const onSubmit: SubmitHandler<FormValues> = data => {
     console.log(data);
-    post('https://example.com', data)
+    post(`${process.env.REACT_APP_API_BASE_URL}`, data)
     .then(data => console.log(data))
     .catch(error => console.log(error));
   }

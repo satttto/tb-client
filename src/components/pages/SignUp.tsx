@@ -24,7 +24,7 @@ export const SignUp = (): JSX.Element => {
   const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onBlur'});
   const nameHelperMap: Map<string, string> = new Map([['required', '名前は必須です']]);
   const emailHelperMap: Map<string, string> = new Map([['required', 'メールアドレスは必須です'], ['pattern', '不正なメールアドレスです']]);
-  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です']]);
+  const passwordHelperMap: Map<string, string> = new Map([['required', 'パスワードは必須です'], ['minLength', '少なくとも8文字は入力してください']]);
   const [ nameHelper, setNameHelper ] = useState('');
   const [ emailHelper, setEmailHelper ] = useState('');
   const [ passwordHelper, setPasswordHelper ] = useState('');
@@ -35,6 +35,7 @@ export const SignUp = (): JSX.Element => {
     const type = errors.name?.type || '';
     const helperText = nameHelperMap.get(type) || '';
     setNameHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.name]);
 
   // メールアドレスのヘルパーテキストの更新
@@ -42,6 +43,7 @@ export const SignUp = (): JSX.Element => {
     const type = errors.email?.type || '';
     const helperText = emailHelperMap.get(type) || '';
     setEmailHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.email]);
 
   // パスワードのヘルパーテキストの更新
@@ -49,6 +51,7 @@ export const SignUp = (): JSX.Element => {
     const type = errors.password?.type || '';
     const helperText = passwordHelperMap.get(type) || '';
     setPasswordHelper(helperText);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors.password]);
 
 
