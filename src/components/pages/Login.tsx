@@ -14,7 +14,6 @@ import {
   Button,
   CircularProgress
 } from '@mui/material';
-import { useFetch } from 'hooks/useFetch';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 type FormValues = {
