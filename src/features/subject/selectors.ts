@@ -1,14 +1,11 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { AuthType } from './authSlice';
+import { SubjectType } from './subjectSlice';
 
-const selector = (state: { auth: AuthType }) => state.auth;
+const selector = (state: { subject: SubjectType }) => state.subject;
 
-// ログイン最中かどうかと既にログイン中かどうかを取得
-export const loginStatusSelector = createSelector(selector, 
-  (state: AuthType) => {
-    return {
-      isLoading: state.isLoading,
-      isLoggedIn: state.isLoggedIn,
-    }
+// 読み込み中かどうかを調べる
+export const subjectStatusSelector = createSelector(selector, 
+  (state: SubjectType) => {
+    return { isLoading: state.isLoading };
   }
 )

@@ -1,36 +1,39 @@
 
 import { createSlice } from '@reduxjs/toolkit';
-import { login } from './actions';
+import { getSubjectList } from './actions';
 
-export type AuthType = {
-  userId: string,
-  isLoggedIn: boolean,
+export type SubjectType = {
+  id: string,
+  title: string,
+  members: [], // TODO: id, member
   isLoading: boolean,
 };
 
-const initialState: AuthType = {
-  userId: '',
-  isLoggedIn: false,
+const initialState: SubjectType = {
+  id: '',
+  title: '',
+  members: [],
   isLoading: false,
 }
 
-const authSlice = createSlice({
-  name: 'auth',
+const subjectSlice = createSlice({
+  name: 'subject',
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.userId     = action.payload.data.id;
-      state.isLoggedIn = true;
-      state.isLoading  = false;
+    builder.addCase(getSubjectList.fulfilled, (state, action) => {
+      state.id    = action.payload.data.id;
+      state.title = action.payload.data.title;
+      state.members   = action.payload.data.members;
+      state.isLoading = false;
     });
-    builder.addCase(login.pending, state => {
+    builder.addCase(getSubjectList.pending, state => {
       state.isLoading = true;
     });
-    builder.addCase(login.rejected, state => {
+    builder.addCase(getSubjectList.rejected, state => {
       state.isLoading = false;
     });
   },
 });
 
-export default authSlice.reducer;
+export default subjectSlice.reducer;

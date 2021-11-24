@@ -9,6 +9,8 @@ import { useState } from 'react';
  * 
  * @returns get method, post method, loading state
  */
+
+// TODO: delete this file
 export const useFetch = () => {
   const [loading, setLoading] = useState(false);
 

@@ -4,7 +4,8 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
-import { Home } from 'components/pages/Home';
+import { Layout } from 'components/common/Layout'
+import { Subject } from 'components/pages/Subject';
 import { Profile } from 'components/pages/Profile';
 import { NotFound } from 'components/pages/NotFound';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -19,17 +20,19 @@ export const AppRoute = (): JSX.Element => {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="" element={<Home />}/>
-        {isAuthenticated && 
-          <>
-          <Route path="/profile" element={<Profile />}/>
-          <Route path="/me" element={<Profile />}/>
-          </>
-        }
-        <Route path="*" element={<NotFound />}/>
-      </Routes>
-    </Router>
+    <Layout>
+      <Router>
+        <Routes>
+          <Route path="" element={<Subject />}/>
+          {isAuthenticated && 
+            <>
+            <Route path="/profile" element={<Profile />}/>
+            <Route path="/me" element={<Profile />}/>
+            </>
+          }
+          <Route path="*" element={<NotFound />}/>
+        </Routes>
+      </Router>
+    </Layout>
   )
 }
