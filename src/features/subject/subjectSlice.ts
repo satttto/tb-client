@@ -37,6 +37,7 @@ const subjectSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getSubjectList.fulfilled, (state, action) => {
       const normalizedList = normalize(action.payload.data, subjectListSchema);
+      console.log(normalizedList)
       state.subjectIds = normalizedList.result;
       state.subjects  = normalizedList.entities.subjects!;
       state.members   = normalizedList.entities.members!;
