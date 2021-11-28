@@ -3,7 +3,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import { Provider } from 'react-redux';
 import { store } from 'app/store';
 import { AppRoute } from 'app/AppRoute';
-
+import { Layout } from 'components/common/Layout'
 
 function App() {
   const domain = process.env.REACT_APP_AUTH0_DOMAIN as string;
@@ -16,7 +16,9 @@ function App() {
       redirectUri={window.location.origin}
     >
       <Provider store={store}>
-        <AppRoute />
+        <Layout>
+          <AppRoute />
+        </Layout>
       </Provider>
     </Auth0Provider>
   );

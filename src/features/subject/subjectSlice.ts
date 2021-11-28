@@ -1,20 +1,34 @@
 
 import { createSlice } from '@reduxjs/toolkit';
+import { normalize } from 'normalizr';
 import { getSubjectList } from './actions';
+import { subjectListSchema } from './schema';
 
-export type SubjectType = {
+type SubjectType = {
   id: string,
   title: string,
-  members: [], // TODO: id, member
-  isLoading: boolean,
+  memberIds: [],
 };
 
-const initialState: SubjectType = {
-  id: '',
-  title: '',
-  members: [],
+type MemberType = {
+  id: string,
+  name: string,
+};
+
+export type SubjectListType = {
+  subjectIds: string[],
+  subjects: Record<string, SubjectType>, // (id, subject)
+  members:  Record<string, MemberType>,    // (id, user)
+  isLoading: boolean,
+}
+
+const initialState: SubjectListType = {
+  subjectIds: [],
+  subjects: {},
+  members: {},
   isLoading: false,
 }
+
 
 const subjectSlice = createSlice({
   name: 'subject',
@@ -22,9 +36,10 @@ const subjectSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getSubjectList.fulfilled, (state, action) => {
-      state.id    = action.payload.data.id;
-      state.title = action.payload.data.title;
-      state.members   = action.payload.data.members;
+      const normalizedList = normalize(action.payload.data, subjectListSchema);
+      state.subjectIds = normalizedList.result;
+      state.subjects  = normalizedList.entities.subjects!;
+      state.members   = normalizedList.entities.members!;
       state.isLoading = false;
     });
     builder.addCase(getSubjectList.pending, state => {

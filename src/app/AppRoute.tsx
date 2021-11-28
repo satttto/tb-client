@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
-import { Layout } from 'components/common/Layout'
 import { Subject } from 'components/pages/Subject';
 import { Profile } from 'components/pages/Profile';
 import { NotFound } from 'components/pages/NotFound';
@@ -20,7 +19,6 @@ export const AppRoute = (): JSX.Element => {
   }
 
   return (
-    <Layout>
       <Router>
         <Routes>
           <Route path="" element={<Subject />}/>
@@ -33,6 +31,5 @@ export const AppRoute = (): JSX.Element => {
           <Route path="*" element={<NotFound />}/>
         </Routes>
       </Router>
-    </Layout>
   )
 }
