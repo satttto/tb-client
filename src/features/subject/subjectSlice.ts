@@ -4,13 +4,13 @@ import { normalize } from 'normalizr';
 import { getSubjectList } from './actions';
 import { subjectListSchema } from './schema';
 
-type SubjectType = {
+export type SubjectType = {
   id: string,
   title: string,
   memberIds: [],
 };
 
-type MemberType = {
+export type MemberType = {
   id: string,
   name: string,
 };
