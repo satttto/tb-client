@@ -19,6 +19,8 @@ export type SubjectListType = {
   subjectIds: string[],
   subjects: Record<string, SubjectType>, // (id, subject)
   members:  Record<string, MemberType>,    // (id, user)
+  total: number,
+  hasNext: boolean,
   isLoading: boolean,
 }
 
@@ -26,6 +28,8 @@ const initialState: SubjectListType = {
   subjectIds: [],
   subjects: {},
   members: {},
+  total: 0,
+  hasNext: false,
   isLoading: false,
 }
 
@@ -36,11 +40,12 @@ const subjectSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getSubjectList.fulfilled, (state, action) => {
-      const normalizedList = normalize(action.payload.data, subjectListSchema);
-      console.log(normalizedList)
+      const normalizedList = normalize(action.payload.subjectsList, subjectListSchema);
       state.subjectIds = normalizedList.result;
-      state.subjects  = normalizedList.entities.subjects!;
-      state.members   = normalizedList.entities.members!;
+      state.subjects = normalizedList.entities.subjects!;
+      state.members  = normalizedList.entities.members!;
+      state.total = action.payload.total;
+      state.hasNext  = action.payload.hasnext;
       state.isLoading = false;
     });
     builder.addCase(getSubjectList.pending, state => {

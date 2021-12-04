@@ -1,15 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import { getSubjectListAPI } from 'services/subject';
+import { SubjectListResponse } from 'proto/subject_pb';
 
 export const getSubjectList = createAsyncThunk(
   'subject/list',
-  async () => {
-    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/subjects`, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    return (await response.json());
+  async (arg: { cursor: number, size: number}) => {
+    return await getSubjectListAPI(arg.cursor, arg.size) as SubjectListResponse.AsObject;
   },
 );

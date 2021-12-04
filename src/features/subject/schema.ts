@@ -53,7 +53,7 @@ import { schema } from 'normalizr';
 
 const memberSchema = new schema.Entity('members');
 const subjectSchema = new schema.Entity('subjects', {
-  members: [memberSchema]
+  membersList: [memberSchema]
 });
 
 export const subjectListSchema = new schema.Array(subjectSchema);
